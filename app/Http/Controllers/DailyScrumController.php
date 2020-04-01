@@ -17,7 +17,7 @@ class DailyScrumController extends Controller
     	try{
             $dataUser = User::where('id', $id)->first();
             if($dataUser != NULL){
-            $data["count"] = daily_scrum::count();
+            $data["count"] = DailyScrum::count();
 	        $daily_scrum = array();
 	        $dataDailyScrum = DB::table('daily_scrum')->join('users','users.id','=','daily_scrum.id_users')
                                                ->select('daily_scrum.id', 'users.firstname', 'users.lastname', 'daily_scrum.team', 'daily_scrum.activity_yesterday', 'daily_scrum.activity_today', 'daily_scrum.problem_yesterday', 'daily_scrum.solution')
@@ -58,7 +58,7 @@ class DailyScrumController extends Controller
 
     public function getAll($limit = 10, $offset = 0){
         try{
-            $data["count"] = daily_scrum::count();
+            $data["count"] = DailyScrum::count();
 	        $daily_scrum = array();
 	        $dataDailyScrum = DB::table('daily_scrum')->join('users','users.id','=','daily_scrum.id_users')
                                                ->select('daily_scrum.id', 'users.firstname', 'users.lastname', 'daily_scrum.team', 'daily_scrum.activity_yesterday', 'daily_scrum.activity_today', 'daily_scrum.problem_yesterday', 'daily_scrum.solution')
@@ -78,7 +78,7 @@ class DailyScrumController extends Controller
 
 	            array_push($daily_scrum, $item);
 	        }
-	        $data["$daily_scrum"] = $daily_scrum;
+	        $data["daily_scrum"] = $daily_scrum;
 	        $data["status"] = 1;
 	        return response($data);
 	    } catch(\Exception $e){
@@ -110,7 +110,7 @@ class DailyScrumController extends Controller
 
     		//cek apakah ada id user tersebut
     		if(User::where('id', $request->input('id_users'))->count() > 0){
-    				$data = new daily_scrum();
+    				$data = new DailyScrum();
               		$data->id_users = $request->input('id_users');
 			        $data->team = $request->input('team');
 			        $data->activity_yesterday = $request->input('activity_yesterday');
@@ -142,11 +142,11 @@ class DailyScrumController extends Controller
       {
           try{
   
-              $delete = daily_scrum::where("id", $id)->delete();
+              $delete = DailyScrum::where("id", $id)->delete();
               if($delete){
                 return response([
                   "status"  => 1,
-                    "message"   => "Data User berhasil dihapus."
+                  "message"   => "Data User berhasil dihapus."
                 ]);
               } else {
                 return response([
